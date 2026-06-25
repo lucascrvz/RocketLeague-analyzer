@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="RocketLeagueAnalyzer.Collector/RocketLeagueAnalyzer.Collector.csproj" />
+  <Project Path="RocketLeagueAnalyzer.Domain/RocketLeagueAnalyzer.Domain.csproj" />
+  <Project Path="RocketLeagueAnalyzer.Infrastructure/RocketLeagueAnalyzer.Infrastructure.csproj" />
+  <Project Path="RocketLeagueAnalyzer.Persistance/RocketLeagueAnalyzer.Persistance.csproj" />
+</Solution>

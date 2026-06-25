@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk.Worker">
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>dotnet-RocketLeagueAnalyzer.Collector-2e72f1c5-cc9d-4d25-b04b-77d12e54e814</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="10.0.8" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\RocketLeagueAnalyzer.Domain\RocketLeagueAnalyzer.Domain.csproj" />
+    <ProjectReference Include="..\RocketLeagueAnalyzer.Infrastructure\RocketLeagueAnalyzer.Infrastructure.csproj" />
+    <ProjectReference Include="..\RocketLeagueAnalyzer.Persistance\RocketLeagueAnalyzer.Persistance.csproj" />
+  </ItemGroup>
+</Project>
