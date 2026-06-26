@@ -39,16 +39,28 @@ public class Worker : BackgroundService
 
         await foreach (var evt in _client.ListenAsync(stoppingToken))
         {
+            _logger.LogInformation(
+                "Received event {EventType} match {MatchGuid} payload {Payload}",
+                evt.EventType,
+                evt.MatchGuid ?? "<none>",
+                evt.Payload
+            );
+
             if (!ShouldStore(evt))
             {
                 continue;
             }
 
-            if (!TryParseMatchId(evt.MatchGuid, out var matchId))
+            if (string.IsNullOrWhiteSpace(evt.MatchGuid))
             {
-                _logger.LogDebug("Skipping {EventType}: no MatchGuid in payload", evt.EventType);
+                _logger.LogDebug(
+                    "Skipping {EventType}: offline/local event without MatchGuid",
+                    evt.EventType
+                );
                 continue;
             }
+
+            var matchId = evt.MatchGuid;
 
             using var scope = _scopeFactory.CreateScope();
             var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
@@ -77,20 +89,9 @@ public class Worker : BackgroundService
         return true;
     }
 
-    private static bool TryParseMatchId(string? matchGuid, out Guid matchId)
-    {
-        if (matchGuid is not null && Guid.TryParse(matchGuid, out matchId))
-        {
-            return true;
-        }
-
-        matchId = default;
-        return false;
-    }
-
     private static async Task EnsureMatchAsync(
         AppDbContext db,
-        Guid matchId,
+        string matchId,
         RlStatsEvent evt,
         CancellationToken cancellationToken
     )
@@ -104,7 +105,7 @@ public class Worker : BackgroundService
 
     private static Task PersistEventAsync(
         AppDbContext db,
-        Guid matchId,
+        string matchId,
         RlStatsEvent evt,
         CancellationToken cancellationToken
     )
@@ -125,7 +126,7 @@ public class Worker : BackgroundService
 
     private static async Task HandleMatchEndAsync(
         AppDbContext db,
-        Guid matchId,
+        string matchId,
         RlStatsEvent evt,
         CancellationToken cancellationToken
     )
